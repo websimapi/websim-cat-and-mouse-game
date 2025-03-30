@@ -234,7 +234,7 @@ class Game {
         // Check if enough players are ready
         const readyPlayers = Object.values(this.room.presence).filter(p => p.ready);
         
-        if (readyPlayers.length >= config.gameRules.numberOfMice + 1 && !this.room.roomState.gameStarted) {
+        if (readyPlayers.length >= 2 && !this.room.roomState.gameStarted) {
             // If I'm the first client, I'll be the game master
             const clientIds = Object.keys(this.room.peers);
             const amIGameMaster = clientIds.sort()[0] === this.localPlayerId;
