@@ -1,4 +1,3 @@
-import { Application, Container, Graphics, Text } from 'pixi.js';
 import config from './config.js';
 
 class Game {
@@ -72,7 +71,7 @@ class Game {
     }
     
     setupPixi() {
-        this.app = new Application({
+        this.app = new window.PIXI.Application({
             width: window.innerWidth,
             height: window.innerHeight,
             backgroundColor: 0x1a1a2e,
@@ -84,10 +83,10 @@ class Game {
         document.getElementById('game-canvas').appendChild(this.app.view);
         
         // Create layers
-        this.mapLayer = new Container();
-        this.itemLayer = new Container();
-        this.playerLayer = new Container();
-        this.fogLayer = new Container();
+        this.mapLayer = new window.PIXI.Container();
+        this.itemLayer = new window.PIXI.Container();
+        this.playerLayer = new window.PIXI.Container();
+        this.fogLayer = new window.PIXI.Container();
         
         this.app.stage.addChild(this.mapLayer);
         this.app.stage.addChild(this.itemLayer);
@@ -95,11 +94,11 @@ class Game {
         this.app.stage.addChild(this.fogLayer);
         
         // Create a container for game world
-        this.worldContainer = new Container();
+        this.worldContainer = new window.PIXI.Container();
         this.mapLayer.addChild(this.worldContainer);
         
         // Add timer display
-        this.timerDisplay = new Text('3:00', {
+        this.timerDisplay = new window.PIXI.Text('3:00', {
             fontFamily: 'Arial',
             fontSize: 32,
             fill: 0xffffff,
@@ -472,7 +471,7 @@ class Game {
         
         // Create obstacles
         obstacleLayout.forEach(obstacle => {
-            const graphics = new Graphics();
+            const graphics = new window.PIXI.Graphics();
             graphics.beginFill(config.visuals.wallColor);
             graphics.drawRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
             graphics.endFill();
@@ -481,7 +480,7 @@ class Game {
         
         // Create hiding spots
         hidingSpots.forEach(spot => {
-            const graphics = new Graphics();
+            const graphics = new window.PIXI.Graphics();
             graphics.beginFill(config.visuals.hidingSpotColor, 0.5);
             graphics.drawCircle(spot.x + spot.size / 2, spot.y + spot.size / 2, spot.size / 2);
             graphics.endFill();
@@ -540,7 +539,7 @@ class Game {
         Object.entries(cheeseData).forEach(([id, data]) => {
             if (!this.cheese[id]) {
                 // Create new cheese sprite
-                const cheeseSprite = new Graphics();
+                const cheeseSprite = new window.PIXI.Graphics();
                 cheeseSprite.beginFill(config.visuals.cheeseColor);
                 cheeseSprite.drawCircle(data.size / 2, data.size / 2, data.size / 2);
                 cheeseSprite.endFill();
@@ -594,7 +593,7 @@ class Game {
     }
     
     createCollectionEffect(x, y) {
-        const effect = new Graphics();
+        const effect = new window.PIXI.Graphics();
         effect.beginFill(config.visuals.cheeseColor, 0.7);
         effect.drawCircle(0, 0, 20);
         effect.endFill();
@@ -733,11 +732,11 @@ class Game {
                 const size = config.visuals[role === 'cat' ? 'catSize' : 'mouseSize'];
                 
                 // Create player graphics
-                const playerGraphics = new Graphics();
+                const playerGraphics = new window.PIXI.Graphics();
                 this.drawPlayer(playerGraphics, role, size, color);
                 
                 // Create name tag
-                const nameTag = new Text(this.room.peers[clientId]?.username || 'Player', {
+                const nameTag = new window.PIXI.Text(this.room.peers[clientId]?.username || 'Player', {
                     fontFamily: 'Arial',
                     fontSize: 12,
                     fill: 0xffffff,
@@ -747,11 +746,11 @@ class Game {
                 nameTag.y = -size - 5;
                 
                 // Create health bar
-                const healthBar = new Graphics();
+                const healthBar = new window.PIXI.Graphics();
                 healthBar.y = -size - 10;
                 
                 // Container for player and nametag
-                const container = new Container();
+                const container = new window.PIXI.Container();
                 container.addChild(playerGraphics);
                 container.addChild(nameTag);
                 container.addChild(healthBar);
