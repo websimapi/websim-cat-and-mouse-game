@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js';
+import { Application, Container, Graphics, Text } from 'pixi.js';
 import config from './config.js';
 
 class Game {
@@ -72,7 +72,7 @@ class Game {
     }
     
     setupPixi() {
-        this.app = new PIXI.Application({
+        this.app = new Application({
             width: window.innerWidth,
             height: window.innerHeight,
             backgroundColor: 0x1a1a2e,
@@ -84,10 +84,10 @@ class Game {
         document.getElementById('game-canvas').appendChild(this.app.view);
         
         // Create layers
-        this.mapLayer = new PIXI.Container();
-        this.itemLayer = new PIXI.Container();
-        this.playerLayer = new PIXI.Container();
-        this.fogLayer = new PIXI.Container();
+        this.mapLayer = new Container();
+        this.itemLayer = new Container();
+        this.playerLayer = new Container();
+        this.fogLayer = new Container();
         
         this.app.stage.addChild(this.mapLayer);
         this.app.stage.addChild(this.itemLayer);
@@ -95,11 +95,11 @@ class Game {
         this.app.stage.addChild(this.fogLayer);
         
         // Create a container for game world
-        this.worldContainer = new PIXI.Container();
+        this.worldContainer = new Container();
         this.mapLayer.addChild(this.worldContainer);
         
         // Add timer display
-        this.timerDisplay = new PIXI.Text('3:00', {
+        this.timerDisplay = new Text('3:00', {
             fontFamily: 'Arial',
             fontSize: 32,
             fill: 0xffffff,
@@ -472,7 +472,7 @@ class Game {
         
         // Create obstacles
         obstacleLayout.forEach(obstacle => {
-            const graphics = new PIXI.Graphics();
+            const graphics = new Graphics();
             graphics.beginFill(config.visuals.wallColor);
             graphics.drawRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
             graphics.endFill();
@@ -481,7 +481,7 @@ class Game {
         
         // Create hiding spots
         hidingSpots.forEach(spot => {
-            const graphics = new PIXI.Graphics();
+            const graphics = new Graphics();
             graphics.beginFill(config.visuals.hidingSpotColor, 0.5);
             graphics.drawCircle(spot.x + spot.size / 2, spot.y + spot.size / 2, spot.size / 2);
             graphics.endFill();
@@ -504,11 +504,11 @@ class Game {
             y = Math.floor(Math.random() * (height - 2 * wallThickness - cheeseSize) + wallThickness);
             
             // Check overlap with obstacles
-            validPosition = !this.obstacles.some(obs => {
-                return !(x > obs.x + obs.width || 
-                         x + cheeseSize < obs.x || 
-                         y > obs.y + obs.height || 
-                         y + cheeseSize < obs.y);
+            validPosition = !this.obstacles.some(obstacle => {
+                return !(x > obstacle.x + obstacle.width || 
+                         x + cheeseSize < obstacle.x || 
+                         y > obstacle.y + obstacle.height || 
+                         y + cheeseSize < obstacle.y);
             });
         }
         
@@ -540,7 +540,7 @@ class Game {
         Object.entries(cheeseData).forEach(([id, data]) => {
             if (!this.cheese[id]) {
                 // Create new cheese sprite
-                const cheeseSprite = new PIXI.Graphics();
+                const cheeseSprite = new Graphics();
                 cheeseSprite.beginFill(config.visuals.cheeseColor);
                 cheeseSprite.drawCircle(data.size / 2, data.size / 2, data.size / 2);
                 cheeseSprite.endFill();
@@ -594,7 +594,7 @@ class Game {
     }
     
     createCollectionEffect(x, y) {
-        const effect = new PIXI.Graphics();
+        const effect = new Graphics();
         effect.beginFill(config.visuals.cheeseColor, 0.7);
         effect.drawCircle(0, 0, 20);
         effect.endFill();
@@ -733,11 +733,11 @@ class Game {
                 const size = config.visuals[role === 'cat' ? 'catSize' : 'mouseSize'];
                 
                 // Create player graphics
-                const playerGraphics = new PIXI.Graphics();
+                const playerGraphics = new Graphics();
                 this.drawPlayer(playerGraphics, role, size, color);
                 
                 // Create name tag
-                const nameTag = new PIXI.Text(this.room.peers[clientId]?.username || 'Player', {
+                const nameTag = new Text(this.room.peers[clientId]?.username || 'Player', {
                     fontFamily: 'Arial',
                     fontSize: 12,
                     fill: 0xffffff,
@@ -747,11 +747,11 @@ class Game {
                 nameTag.y = -size - 5;
                 
                 // Create health bar
-                const healthBar = new PIXI.Graphics();
+                const healthBar = new Graphics();
                 healthBar.y = -size - 10;
                 
                 // Container for player and nametag
-                const container = new PIXI.Container();
+                const container = new Container();
                 container.addChild(playerGraphics);
                 container.addChild(nameTag);
                 container.addChild(healthBar);
@@ -951,4 +951,3 @@ class Game {
 document.addEventListener('DOMContentLoaded', () => {
     new Game();
 });
-
